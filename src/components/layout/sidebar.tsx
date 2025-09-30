@@ -1,40 +1,35 @@
 "use client";
 
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { useSidebarSections } from "@/hooks/use-sidebar-sections";
 import {
-  ChevronRight,
-  ChevronDown,
-  User,
-  Clock,
-  Star,
-  Grid3X3,
-  CreditCard,
-  FolderOpen,
-  Users,
-  Plus,
-  MoreHorizontal,
-  ListTodo,
-  PlayCircle,
-  CheckCircle,
-  PauseCircle,
   AlertTriangle,
-  DollarSign,
-  Server,
-  Shield,
   BarChart3,
-  Settings,
-  Search,
-  Bell,
-  MessageSquare,
   Calendar,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  CreditCard,
   Database,
-  Key,
+  DollarSign,
+  Folder,
+  FolderOpen,
   Globe,
+  Key,
+  ListTodo,
+  MessageSquare,
+  MoreHorizontal,
+  Plus,
+  Server,
+  Settings,
+  Shield,
+  Star,
+  User,
   UserCheck,
+  Users,
   Wrench,
 } from "lucide-react";
-import { useSidebarSections } from "@/hooks/use-sidebar-sections";
+import Link from "next/link";
 
 export function Sidebar({
   isCollapsed,
@@ -266,6 +261,12 @@ export function Sidebar({
               </div>
             )}
           </div>
+
+          {/* Document */}
+          <Link href="/document" className={navigationLinkClasses}>
+            <Folder className="w-4 h-4 flex-shrink-0" />
+            {!isCollapsed && <span>Quản lý tài liệu</span>}
+          </Link>
 
           {/* Finance & Budget */}
           <Link href="/finance" className={navigationLinkClasses}>
