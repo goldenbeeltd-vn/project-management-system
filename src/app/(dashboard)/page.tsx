@@ -1,10 +1,6 @@
-"use client";
-
-import { Layout } from "@/components/layout/layout";
-
 export default function HomePage() {
   return (
-    <Layout>
+    <>
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
@@ -35,6 +31,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

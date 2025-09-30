@@ -1,40 +1,34 @@
 "use client";
 
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { useSidebarSections } from "@/hooks/use-sidebar-sections";
 import {
-  ChevronRight,
-  ChevronDown,
-  User,
-  Clock,
-  Star,
-  Grid3X3,
-  CreditCard,
-  FolderOpen,
-  Users,
-  Plus,
-  MoreHorizontal,
-  ListTodo,
-  PlayCircle,
-  CheckCircle,
-  PauseCircle,
   AlertTriangle,
-  DollarSign,
-  Server,
-  Shield,
   BarChart3,
-  Settings,
-  Search,
-  Bell,
-  MessageSquare,
   Calendar,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  CreditCard,
   Database,
-  Key,
+  DollarSign,
+  FolderOpen,
   Globe,
+  Key,
+  LayoutGrid,
+  ListTodo,
+  MessageSquare,
+  MoreHorizontal,
+  Plus,
+  Server,
+  Settings,
+  Shield,
+  Star,
   UserCheck,
+  Users,
   Wrench,
 } from "lucide-react";
-import { useSidebarSections } from "@/hooks/use-sidebar-sections";
+import Link from "next/link";
 
 export function Sidebar({
   isCollapsed,
@@ -61,9 +55,9 @@ export function Sidebar({
       {/* Main Navigation - Scrollable */}
       <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide">
         <nav className="space-y-1 p-5.5">
-          {/* For you */}
+          {/* Dashboard */}
           <Link href="/dashboard" className={navigationLinkClasses}>
-            <User className="w-4 h-4 flex-shrink-0" />
+            <LayoutGrid className="w-4 h-4 flex-shrink-0" />
             {!isCollapsed && <span>Dashboard</span>}
           </Link>
 
@@ -86,7 +80,7 @@ export function Sidebar({
           </Link>
 
           {/* Apps */}
-          <Link href="/apps" className={navigationLinkClasses}>
+          <Link href="/tasks" className={navigationLinkClasses}>
             <ListTodo className="w-4 h-4 flex-shrink-0" />
             {!isCollapsed && <span>Công việc</span>}
           </Link>
@@ -119,7 +113,7 @@ export function Sidebar({
             >
               <div className="flex items-center gap-3">
                 <FolderOpen className="w-4 h-4 flex-shrink-0" />
-                {!isCollapsed && <span className="font-medium">Dự án</span>}
+                {!isCollapsed && <span>Dự án</span>}
               </div>
               {!isCollapsed &&
                 (isExpanded("projects") ? (
@@ -177,9 +171,7 @@ export function Sidebar({
             >
               <div className="flex items-center gap-3">
                 <Users className="w-4 h-4 flex-shrink-0" />
-                {!isCollapsed && (
-                  <span className="font-medium">Quản lý Nhân sự</span>
-                )}
+                {!isCollapsed && <span>Quản lý Nhân sự</span>}
               </div>
               {!isCollapsed &&
                 (isExpanded("team") ? (
@@ -221,9 +213,7 @@ export function Sidebar({
             >
               <div className="flex items-center gap-3">
                 <Server className="w-4 h-4 flex-shrink-0" />
-                {!isCollapsed && (
-                  <span className="font-medium">Hạ tầng & Hosting</span>
-                )}
+                {!isCollapsed && <span>Hạ tầng & Hosting</span>}
               </div>
               {!isCollapsed &&
                 (isExpanded("infrastructure") ? (
