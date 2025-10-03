@@ -11,6 +11,7 @@ import {
   CreditCard,
   Database,
   DollarSign,
+  Folder,
   FolderOpen,
   Globe,
   Key,
@@ -253,6 +254,12 @@ export function Sidebar({
               </div>
             )}
           </div>
+
+          {/* Document */}
+          <Link href="/document" className={navigationLinkClasses}>
+            <Folder className="w-4 h-4 flex-shrink-0" />
+            {!isCollapsed && <span>Quản lý tài liệu</span>}
+          </Link>
 
           {/* Finance & Budget */}
           <Link href="/finance" className={navigationLinkClasses}>
