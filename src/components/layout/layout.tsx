@@ -1,9 +1,10 @@
 "use client";
 
+import { useSidebar } from "@/hooks/use-sidebar";
 import { ReactNode } from "react";
+import { Toaster } from "../ui/sonner";
 import { Navigation } from "./navigation";
 import { Sidebar } from "./sidebar";
-import { useSidebar } from "@/hooks/use-sidebar";
 
 interface LayoutProps {
   children?: ReactNode;
@@ -30,6 +31,7 @@ export function Layout({ children }: LayoutProps) {
           {children}
         </div>
       </div>
+      <Toaster position="top-center" richColors />
     </div>
   );
 }

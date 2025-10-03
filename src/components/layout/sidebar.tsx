@@ -1,40 +1,33 @@
 "use client";
 
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { useSidebarSections } from "@/hooks/use-sidebar-sections";
 import {
-  ChevronRight,
-  ChevronDown,
-  User,
-  Clock,
-  Star,
-  Grid3X3,
-  CreditCard,
-  FolderOpen,
-  Users,
-  Plus,
-  MoreHorizontal,
-  ListTodo,
-  PlayCircle,
-  CheckCircle,
-  PauseCircle,
   AlertTriangle,
-  DollarSign,
-  Server,
-  Shield,
   BarChart3,
-  Settings,
-  Search,
-  Bell,
-  MessageSquare,
-  Calendar,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  CreditCard,
   Database,
-  Key,
+  DollarSign,
+  FolderOpen,
   Globe,
+  Key,
+  ListTodo,
+  MessageSquare,
+  MoreHorizontal,
+  Plus,
+  Server,
+  Settings,
+  Shield,
+  Star,
+  User,
   UserCheck,
+  Users,
   Wrench,
 } from "lucide-react";
-import { useSidebarSections } from "@/hooks/use-sidebar-sections";
+import Link from "next/link";
 
 export function Sidebar({
   isCollapsed,
@@ -43,7 +36,7 @@ export function Sidebar({
   isCollapsed: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
 }) {
-  const { toggleSection, isExpanded } = useSidebarSections(["projects"]);
+  const { toggleSection, isExpanded } = useSidebarSections([""]);
 
   // Unified styles
   const baseItemClasses = isCollapsed
@@ -168,7 +161,7 @@ export function Sidebar({
           {/* Team Management */}
           <div className="space-y-1">
             <button
-              onClick={() => toggleSection("team")}
+              onClick={() => toggleSection("members")}
               className={
                 isCollapsed
                   ? `${baseItemClasses} justify-center`
@@ -189,19 +182,13 @@ export function Sidebar({
                 ))}
             </button>
 
-            {!isCollapsed && isExpanded("team") && (
+            {!isCollapsed && isExpanded("members") && (
               <div className="ml-4 mt-1 space-y-1">
-                <Link href="/team" className={navigationLinkClasses}>
+                <Link href="/members" className={navigationLinkClasses}>
                   <UserCheck className="w-4 h-4 flex-shrink-0" />
                   <span>Thành viên</span>
                 </Link>
-
-                <Link href="/team/allocation" className={navigationLinkClasses}>
-                  <Calendar className="w-4 h-4 flex-shrink-0" />
-                  <span>Phân bổ công việc</span>
-                </Link>
-
-                <Link href="/team/roles" className={navigationLinkClasses}>
+                <Link href="/members/roles" className={navigationLinkClasses}>
                   <Shield className="w-4 h-4 flex-shrink-0" />
                   <span>Vai trò & Quyền hạn</span>
                 </Link>
