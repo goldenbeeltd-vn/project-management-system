@@ -162,3 +162,68 @@ export interface InputChangeEvent {
     name?: string;
   };
 }
+
+// Kanban desk
+
+export interface User {
+  id: string;
+  email?: string;
+  displayName: string;
+  avatar: string;
+}
+
+export interface Comment {
+  id: number;
+  userId: string;
+  userEmail: string;
+  userAvatar: string;
+  userDisplayName: string;
+  content: string;
+  commentAt: string;
+}
+
+export interface ChecklistItem {
+  id: string;
+  content: string;
+  completed: boolean;
+}
+
+export interface Card {
+  id: string;
+  projectId: string;
+  columnId: string;
+  title: string;
+  description?: string;
+  cover?: string;
+  comments: Comment[];
+  checklist: ChecklistItem[];
+  memberIds: string[];
+  createdAt: string;
+  updatedAt: string;
+  deadlineDate?: string;
+  _destroy: boolean;
+}
+
+// Card với option FE_PlaceholderCard
+export interface CardWithPlaceholder extends Card {
+  FE_PlaceholderCard?: boolean;
+}
+
+export interface Column {
+  id: string;
+  projectId: string;
+  title: string;
+  cardOrderIds: string[];
+  updatedAt: string;
+  _destroy: boolean;
+  cards: Card[];
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  description?: string;
+  columnOrderIds: string[];
+  users: User[];
+  columns: Column[];
+}
