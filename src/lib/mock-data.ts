@@ -6,6 +6,14 @@ export interface User {
   role: "admin" | "manager" | "developer" | "qc" | "devops";
   phone?: string;
   position?: string;
+  department?: string;
+  salary?: {
+    hourlyRate: number; // VND per hour
+    monthlyRate: number; // VND per month
+    overtimeRate: number; // VND per overtime hour
+  };
+  experience?: string; // e.g., "2+ years", "Senior", etc.
+  skills?: string[];
 }
 
 export interface Account {
@@ -67,11 +75,14 @@ export interface Client {
   projects: string[];
 }
 
+import { ProjectCategory } from "@/types/projects/common";
+
 export interface Project {
   id: string;
   name: string;
   description: string;
   type: "web" | "mobile" | "desktop" | "api" | "other";
+  category: ProjectCategory;
   status:
     | "planning"
     | "in_progress"
@@ -156,6 +167,26 @@ export interface Task {
   dueDate: string;
 }
 
+export interface DocumentFolder {
+  id: string;
+  name: string;
+  fileCount: number;
+  color: string;
+  lastModified: string;
+  size?: number;
+  files?: DocumentFile[];
+}
+
+export interface DocumentFile {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  uploadDate: string;
+  uploadedBy: string;
+  url?: string;
+}
+
 // Mock Users
 export const mockUsers: User[] = [
   {
@@ -166,6 +197,14 @@ export const mockUsers: User[] = [
     role: "manager",
     phone: "0901234567",
     position: "Project Manager",
+    department: "Quản lý dự án",
+    salary: {
+      hourlyRate: 500000,
+      monthlyRate: 25000000,
+      overtimeRate: 750000,
+    },
+    experience: "5+ years",
+    skills: ["Project Management", "Scrum", "Leadership", "Planning"],
   },
   {
     id: "2",
@@ -175,6 +214,14 @@ export const mockUsers: User[] = [
     role: "developer",
     phone: "0901234568",
     position: "Frontend Developer",
+    department: "Phát triển",
+    salary: {
+      hourlyRate: 350000,
+      monthlyRate: 18000000,
+      overtimeRate: 525000,
+    },
+    experience: "3+ years",
+    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "UI/UX"],
   },
   {
     id: "3",
@@ -184,6 +231,14 @@ export const mockUsers: User[] = [
     role: "developer",
     phone: "0901234569",
     position: "Backend Developer",
+    department: "Phát triển",
+    salary: {
+      hourlyRate: 380000,
+      monthlyRate: 20000000,
+      overtimeRate: 570000,
+    },
+    experience: "4+ years",
+    skills: ["Node.js", "Python", "PostgreSQL", "MongoDB", "Docker"],
   },
   {
     id: "4",
@@ -193,6 +248,14 @@ export const mockUsers: User[] = [
     role: "qc",
     phone: "0901234570",
     position: "QC Tester",
+    department: "QC & Testing",
+    salary: {
+      hourlyRate: 300000,
+      monthlyRate: 15000000,
+      overtimeRate: 450000,
+    },
+    experience: "2+ years",
+    skills: ["Manual Testing", "Automated Testing", "Selenium", "Bug Tracking"],
   },
   {
     id: "5",
@@ -202,6 +265,14 @@ export const mockUsers: User[] = [
     role: "devops",
     phone: "0901234571",
     position: "DevOps Engineer",
+    department: "DevOps & Infrastructure",
+    salary: {
+      hourlyRate: 400000,
+      monthlyRate: 22000000,
+      overtimeRate: 600000,
+    },
+    experience: "3+ years",
+    skills: ["AWS", "Docker", "Kubernetes", "CI/CD", "Linux"],
   },
   {
     id: "6",
@@ -211,6 +282,14 @@ export const mockUsers: User[] = [
     role: "admin",
     phone: "0901234572",
     position: "System Admin",
+    department: "IT & Administration",
+    salary: {
+      hourlyRate: 450000,
+      monthlyRate: 20000000,
+      overtimeRate: 675000,
+    },
+    experience: "5+ years",
+    skills: ["System Administration", "Network Management", "Security"],
   },
   {
     id: "7",
@@ -220,6 +299,14 @@ export const mockUsers: User[] = [
     role: "developer",
     phone: "0901234573",
     position: "Mobile Developer",
+    department: "Phát triển",
+    salary: {
+      hourlyRate: 370000,
+      monthlyRate: 19000000,
+      overtimeRate: 555000,
+    },
+    experience: "3+ years",
+    skills: ["React Native", "Flutter", "iOS", "Android", "Firebase"],
   },
   {
     id: "8",
@@ -229,6 +316,19 @@ export const mockUsers: User[] = [
     role: "manager",
     phone: "0901234574",
     position: "Technical Lead",
+    department: "Quản lý dự án",
+    salary: {
+      hourlyRate: 480000,
+      monthlyRate: 24000000,
+      overtimeRate: 720000,
+    },
+    experience: "6+ years",
+    skills: [
+      "Technical Leadership",
+      "Architecture",
+      "Code Review",
+      "Mentoring",
+    ],
   },
   {
     id: "9",
@@ -238,6 +338,14 @@ export const mockUsers: User[] = [
     role: "developer",
     phone: "0901234575",
     position: "Full Stack Developer",
+    department: "Phát triển",
+    salary: {
+      hourlyRate: 420000,
+      monthlyRate: 21000000,
+      overtimeRate: 630000,
+    },
+    experience: "4+ years",
+    skills: ["React", "Node.js", "MongoDB", "Express", "GraphQL"],
   },
   {
     id: "10",
@@ -247,10 +355,23 @@ export const mockUsers: User[] = [
     role: "qc",
     phone: "0901234576",
     position: "QA Lead",
+    department: "QC & Testing",
+    salary: {
+      hourlyRate: 350000,
+      monthlyRate: 17000000,
+      overtimeRate: 525000,
+    },
+    experience: "4+ years",
+    skills: [
+      "Test Strategy",
+      "Team Management",
+      "Automation",
+      "Quality Assurance",
+    ],
   },
 ];
 
-// Mock Clients
+// Mock Clients - Updated with more fields
 export const mockClients: Client[] = [
   {
     id: "1",
@@ -376,6 +497,7 @@ export const mockProjects: Project[] = [
     description:
       "Phát triển website thương mại điện tử với đầy đủ tính năng thanh toán, quản lý kho, CRM",
     type: "web",
+    category: "ecommerce",
     status: "in_progress",
     priority: "high",
     startDate: "2024-01-15",
@@ -463,6 +585,7 @@ export const mockProjects: Project[] = [
     description:
       "Xây dựng hệ thống quản lý nhân sự toàn diện cho doanh nghiệp 500+ nhân viên",
     type: "web",
+    category: "system",
     status: "maintenance",
     priority: "medium",
     startDate: "2023-10-01",
@@ -525,6 +648,7 @@ export const mockProjects: Project[] = [
     name: "App Mobile Giao Hàng",
     description: "Ứng dụng mobile cho dịch vụ giao hàng nhanh trong thành phố",
     type: "mobile",
+    category: "mobile",
     status: "planning",
     priority: "urgent",
     startDate: "2024-04-01",
@@ -560,6 +684,7 @@ export const mockProjects: Project[] = [
     description:
       "Xây dựng nền tảng fintech với tính năng cho vay, thanh toán và quản lý tài chính cá nhân",
     type: "web",
+    category: "software",
     status: "in_progress",
     priority: "high",
     startDate: "2024-03-01",
@@ -655,6 +780,7 @@ export const mockProjects: Project[] = [
     description:
       "Nền tảng học trực tuyến với video streaming, bài tập tương tác và quản lý lớp học",
     type: "web",
+    category: "system",
     status: "completed",
     priority: "medium",
     startDate: "2024-02-15",
@@ -726,6 +852,7 @@ export const mockProjects: Project[] = [
     description:
       "Hệ thống tổng thể quản lý bệnh viện: bệnh nhân, lịch hẹn, thuốc, thiết bị y tế",
     type: "web",
+    category: "system",
     status: "on_hold",
     priority: "high",
     startDate: "2023-12-01",
@@ -800,6 +927,114 @@ export const mockProjects: Project[] = [
         lastSync: "2024-08-15",
       },
     },
+  },
+  {
+    id: "7",
+    name: "Website WordPress Spa & Wellness",
+    description:
+      "Phát triển website WordPress cho trung tâm spa với tính năng đặt lịch hẹn, thanh toán online",
+    type: "web",
+    category: "wordpress",
+    status: "completed",
+    priority: "medium",
+    startDate: "2024-01-01",
+    endDate: "2024-03-15",
+    budget: 80000000,
+    actualCost: 75000000,
+    progress: 100,
+    manager: mockUsers[0],
+    team: {
+      frontend: [mockUsers[1]],
+      backend: [mockUsers[2]],
+      qc: [mockUsers[3]],
+      devops: [mockUsers[4]],
+    },
+    clientId: "1",
+    accounts: [],
+    risks: [],
+    documents: [],
+    integrations: {},
+  },
+  {
+    id: "8",
+    name: "Plugin WordPress WooCommerce Custom",
+    description:
+      "Phát triển plugin tùy chỉnh cho WooCommerce với tính năng quản lý đơn hàng đặc biệt",
+    type: "web",
+    category: "wordpress",
+    status: "in_progress",
+    priority: "high",
+    startDate: "2024-07-01",
+    endDate: "2024-10-30",
+    budget: 120000000,
+    actualCost: 60000000,
+    progress: 50,
+    manager: mockUsers[0],
+    team: {
+      frontend: [mockUsers[1]],
+      backend: [mockUsers[2]],
+      qc: [mockUsers[3]],
+      devops: [],
+    },
+    clientId: "2",
+    accounts: [],
+    risks: [],
+    documents: [],
+    integrations: {},
+  },
+  {
+    id: "9",
+    name: "Tối Ưu SEO Website Doanh Nghiệp",
+    description:
+      "Dự án tối ưu SEO toàn diện cho website doanh nghiệp, tăng thứ hạng từ khóa mục tiêu",
+    type: "web",
+    category: "seo",
+    status: "in_progress",
+    priority: "medium",
+    startDate: "2024-06-01",
+    endDate: "2024-12-31",
+    budget: 60000000,
+    actualCost: 30000000,
+    progress: 40,
+    manager: mockUsers[7],
+    team: {
+      frontend: [],
+      backend: [],
+      qc: [mockUsers[3]],
+      devops: [],
+    },
+    clientId: "3",
+    accounts: [],
+    risks: [],
+    documents: [],
+    integrations: {},
+  },
+  {
+    id: "10",
+    name: "Website Landing Page Marketing",
+    description:
+      "Thiết kế và phát triển landing page cho chiến dịch marketing sản phẩm mới",
+    type: "web",
+    category: "website",
+    status: "completed",
+    priority: "high",
+    startDate: "2024-05-01",
+    endDate: "2024-06-15",
+    budget: 45000000,
+    actualCost: 42000000,
+    progress: 100,
+    manager: mockUsers[0],
+    team: {
+      frontend: [mockUsers[1]],
+      backend: [],
+      qc: [mockUsers[3]],
+      devops: [mockUsers[4]],
+    },
+    clientId: "4",
+    accounts: [],
+    risks: [],
+    documents: [],
+    integrations: {},
   },
 ];
 
@@ -972,6 +1207,22 @@ export const mockTasks: Task[] = [
   },
 ];
 
+// Helper functions for form data
+export const getClientOptions = () =>
+  mockClients.map((client) => ({
+    value: client.id,
+    label: client.name,
+    company: client.industry,
+  }));
+
+export const getTeamMemberOptions = () =>
+  mockUsers.map((user) => ({
+    value: user.id,
+    label: user.name,
+    role: user.position || user.role,
+    avatar: user.avatar,
+  }));
+
 // Utility functions
 export const getProjectById = (id: string) =>
   mockProjects.find((p) => p.id === id);
@@ -1042,7 +1293,7 @@ export const formatDate = (dateString: string) => {
 
 export const isHostingExpiringSoon = (
   expiryDate: string,
-  days: number = 30
+  days: number = 30,
 ) => {
   const expiry = new Date(expiryDate);
   const today = new Date();
@@ -1062,7 +1313,7 @@ export const getProjectStats = () => {
     totalBudget: mockProjects.reduce((sum, p) => sum + p.budget, 0),
     totalActualCost: mockProjects.reduce((sum, p) => sum + p.actualCost, 0),
     expiringHosting: mockProjects.filter(
-      (p) => p.hosting && isHostingExpiringSoon(p.hosting.expiryDate)
+      (p) => p.hosting && isHostingExpiringSoon(p.hosting.expiryDate),
     ).length,
   };
   return stats;
@@ -1099,3 +1350,169 @@ export const getTeamWorkload = () => {
 
   return Object.values(workload);
 };
+
+// Mock Document Files
+export const mockDocumentFiles: DocumentFile[] = [
+  // Files for "Tài liệu báo giá" (folder id: "1")
+  {
+    id: "file-1-1",
+    name: "Báo giá website ABC Shop.pdf",
+    type: "application/pdf",
+    size: 2548720,
+    uploadDate: "2024-08-18",
+    uploadedBy: "Nguyễn Văn An",
+    url: "/documents/bao-gia-abc-shop.pdf",
+  },
+  {
+    id: "file-1-2",
+    name: "Báo giá phát triển mobile app.docx",
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    size: 1876543,
+    uploadDate: "2024-08-17",
+    uploadedBy: "Trần Thị Bình",
+    url: "/documents/bao-gia-mobile-app.docx",
+  },
+  {
+    id: "file-1-3",
+    name: "Biểu phí hosting năm 2024.xlsx",
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    size: 567890,
+    uploadDate: "2024-08-16",
+    uploadedBy: "Lê Văn Cường",
+  },
+
+  // Files for "Tài liệu hợp đồng" (folder id: "2")
+  {
+    id: "file-2-1",
+    name: "Hợp đồng phát triển website ABC.pdf",
+    type: "application/pdf",
+    size: 3421876,
+    uploadDate: "2024-08-13",
+    uploadedBy: "Nguyễn Văn An",
+    url: "/documents/hop-dong-abc.pdf",
+  },
+  {
+    id: "file-2-2",
+    name: "Phụ lục hợp đồng - Yêu cầu kỹ thuật.pdf",
+    type: "application/pdf",
+    size: 1987654,
+    uploadDate: "2024-08-13",
+    uploadedBy: "Nguyễn Văn An",
+  },
+  {
+    id: "file-2-3",
+    name: "Hợp đồng bảo trì hệ thống.docx",
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    size: 1234567,
+    uploadDate: "2024-08-10",
+    uploadedBy: "Phạm Thị Dung",
+  },
+
+  // Files for "Tài liệu kỹ thuật" (folder id: "5")
+  {
+    id: "file-5-1",
+    name: "Database Schema Design.pdf",
+    type: "application/pdf",
+    size: 4567890,
+    uploadDate: "2024-08-19",
+    uploadedBy: "Lê Văn Cường",
+  },
+  {
+    id: "file-5-2",
+    name: "API Documentation v1.2.pdf",
+    type: "application/pdf",
+    size: 6789123,
+    uploadDate: "2024-08-18",
+    uploadedBy: "Hoàng Văn Em",
+  },
+  {
+    id: "file-5-3",
+    name: "System Architecture Diagram.png",
+    type: "image/png",
+    size: 987654,
+    uploadDate: "2024-08-17",
+    uploadedBy: "Phan Văn Ích",
+  },
+  {
+    id: "file-5-4",
+    name: "Frontend Component Structure.md",
+    type: "text/markdown",
+    size: 234567,
+    uploadDate: "2024-08-16",
+    uploadedBy: "Trần Thị Bình",
+  },
+];
+
+// Mock Document Folders
+export const mockDocumentFolders: DocumentFolder[] = [
+  {
+    id: "1",
+    name: "Tài liệu báo giá",
+    fileCount: 3,
+    color: "bg-blue-100 text-blue-600",
+    lastModified: "2 ngày trước",
+    files: mockDocumentFiles.filter((file) =>
+      ["file-1-1", "file-1-2", "file-1-3"].includes(file.id),
+    ),
+  },
+  {
+    id: "2",
+    name: "Tài liệu hợp đồng",
+    fileCount: 3,
+    color: "bg-green-100 text-green-600",
+    lastModified: "5 ngày trước",
+    files: mockDocumentFiles.filter((file) =>
+      ["file-2-1", "file-2-2", "file-2-3"].includes(file.id),
+    ),
+  },
+  {
+    id: "3",
+    name: "Tài liệu hóa đơn",
+    fileCount: 0,
+    color: "bg-yellow-100 text-yellow-600",
+    lastModified: "1 tuần trước",
+    files: [],
+  },
+  {
+    id: "4",
+    name: "Tài liệu đặc tả",
+    fileCount: 0,
+    color: "bg-purple-100 text-purple-600",
+    lastModified: "3 ngày trước",
+    files: [],
+  },
+  {
+    id: "5",
+    name: "Tài liệu kỹ thuật",
+    fileCount: 4,
+    color: "bg-red-100 text-red-600",
+    lastModified: "1 ngày trước",
+    files: mockDocumentFiles.filter((file) =>
+      ["file-5-1", "file-5-2", "file-5-3", "file-5-4"].includes(file.id),
+    ),
+  },
+  {
+    id: "6",
+    name: "Tài liệu pháp lý",
+    fileCount: 0,
+    color: "bg-indigo-100 text-indigo-600",
+    lastModified: "2 tuần trước",
+    files: [],
+  },
+  {
+    id: "7",
+    name: "Tài liệu tài chính",
+    fileCount: 0,
+    color: "bg-orange-100 text-orange-600",
+    lastModified: "4 ngày trước",
+    files: [],
+  },
+  {
+    id: "8",
+    name: "Báo cáo dự án",
+    fileCount: 0,
+    color: "bg-teal-100 text-teal-600",
+    lastModified: "6 ngày trước",
+    files: [],
+  },
+];
