@@ -5,13 +5,13 @@ import { useSidebarSections } from "@/hooks/use-sidebar-sections";
 import {
   AlertTriangle,
   BarChart3,
-  Calendar,
   ChevronDown,
   ChevronRight,
   Clock,
   CreditCard,
   Database,
   DollarSign,
+  Folder,
   FolderOpen,
   Globe,
   Key,
@@ -24,6 +24,7 @@ import {
   Settings,
   Shield,
   Star,
+  User,
   UserCheck,
   Users,
   Wrench,
@@ -37,7 +38,7 @@ export function Sidebar({
   isCollapsed: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
 }) {
-  const { toggleSection, isExpanded } = useSidebarSections(["projects"]);
+  const { toggleSection, isExpanded } = useSidebarSections([""]);
 
   // Unified styles
   const baseItemClasses = isCollapsed
@@ -162,7 +163,7 @@ export function Sidebar({
           {/* Team Management */}
           <div className="space-y-1">
             <button
-              onClick={() => toggleSection("team")}
+              onClick={() => toggleSection("members")}
               className={
                 isCollapsed
                   ? `${baseItemClasses} justify-center`
@@ -181,19 +182,13 @@ export function Sidebar({
                 ))}
             </button>
 
-            {!isCollapsed && isExpanded("team") && (
+            {!isCollapsed && isExpanded("members") && (
               <div className="ml-4 mt-1 space-y-1">
-                <Link href="/team" className={navigationLinkClasses}>
+                <Link href="/members" className={navigationLinkClasses}>
                   <UserCheck className="w-4 h-4 flex-shrink-0" />
                   <span>Thành viên</span>
                 </Link>
-
-                <Link href="/team/allocation" className={navigationLinkClasses}>
-                  <Calendar className="w-4 h-4 flex-shrink-0" />
-                  <span>Phân bổ công việc</span>
-                </Link>
-
-                <Link href="/team/roles" className={navigationLinkClasses}>
+                <Link href="/members/roles" className={navigationLinkClasses}>
                   <Shield className="w-4 h-4 flex-shrink-0" />
                   <span>Vai trò & Quyền hạn</span>
                 </Link>
@@ -256,6 +251,12 @@ export function Sidebar({
               </div>
             )}
           </div>
+
+          {/* Document */}
+          <Link href="/document" className={navigationLinkClasses}>
+            <Folder className="w-4 h-4 flex-shrink-0" />
+            {!isCollapsed && <span>Quản lý tài liệu</span>}
+          </Link>
 
           {/* Finance & Budget */}
           <Link href="/finance" className={navigationLinkClasses}>
