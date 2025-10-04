@@ -519,8 +519,8 @@ export const ACCOUNT_TYPE_CONFIGS: Record<
     },
     placeholders: {
       name: "Tên Stripe Account",
-      apiKey: "pk_live_xxxxxxxxxxxxxxxxxxxxxxxxx",
-      secretKey: "sk_live_xxxxxxxxxxxxxxxxxxxxxxxxx",
+      apiKey: "pk_test_EXAMPLE_KEY_ONLY",
+      secretKey: "sk_test_EXAMPLE_KEY_ONLY",
     },
   },
   paypal: {
@@ -536,8 +536,8 @@ export const ACCOUNT_TYPE_CONFIGS: Record<
     placeholders: {
       name: "Tên PayPal Account",
       email: "business@company.com",
-      apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-      secretKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      apiKey: "EXAMPLE_CLIENT_ID_ONLY",
+      secretKey: "EXAMPLE_CLIENT_SECRET_ONLY",
     },
   },
   email: {
