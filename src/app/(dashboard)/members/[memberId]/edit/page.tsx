@@ -35,6 +35,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const departments = [
   { value: "Kỹ thuật", label: "Kỹ thuật" },
@@ -126,7 +127,7 @@ const EditMemberPage = () => {
   const onSubmit = async (data: MemberFormType) => {
     // TODO: Call API to update member
     console.log(data);
-    alert("Cập nhật thành viên thành công!");
+    toast.success("Cập nhật thành viên thành công!");
   };
 
   return (

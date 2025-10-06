@@ -1,12 +1,11 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { Layout } from "@/components/layout/layout";
 import { ProjectDetailView } from "@/components/display/projects/project-detail-view";
-import { useProjectById } from "@/hooks/projects/use-project-by-id";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useProjectById } from "@/hooks/projects/use-project-by-id";
 import { AlertCircle } from "lucide-react";
+import { useParams } from "next/navigation";
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -16,7 +15,7 @@ export default function ProjectDetailPage() {
 
   if (isLoading) {
     return (
-      <Layout>
+      <>
         <div className="space-y-6">
           <Skeleton className="h-8 w-1/3" />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -30,13 +29,13 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         </div>
-      </Layout>
+      </>
     );
   }
 
   if (error || !project) {
     return (
-      <Layout>
+      <>
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Lỗi</AlertTitle>
@@ -44,13 +43,13 @@ export default function ProjectDetailPage() {
             {error || "Không tìm thấy dự án với ID này."}
           </AlertDescription>
         </Alert>
-      </Layout>
+      </>
     );
   }
 
   return (
-    <Layout>
+    <>
       <ProjectDetailView project={project} />
-    </Layout>
+    </>
   );
 }
