@@ -2,16 +2,16 @@
  * Auth Hooks với Redux
  */
 
-import { useCallback, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/useReduxDispatch";
 import {
+  clearError,
   initializeAuth,
   loginUser,
-  registerUser,
   logoutUser,
   refreshUser,
-  clearError,
-} from "@/store/slices/authSlice";
+  registerUser,
+} from "@/store/auth/authSlice";
+import { useCallback, useEffect } from "react";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();

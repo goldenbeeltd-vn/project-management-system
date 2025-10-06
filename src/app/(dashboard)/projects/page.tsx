@@ -1,10 +1,8 @@
 "use client";
 
-"use client";
-
-import { Layout } from "@/components/layout/layout";
-import { ProjectFilters } from "@/components/filters/projects/project-filters";
 import { ProjectsDisplay } from "@/components/display/projects/projects-display";
+import { ProjectFilters } from "@/components/filters/projects/project-filters";
+import { Layout } from "@/components/layout/layout";
 import { useProjectFilters } from "@/hooks/projects/use-project-filters";
 
 export default function ProjectsPage() {
