@@ -3,7 +3,7 @@
  * User, permission, role types
  */
 
-import { BaseEntity } from "./common";
+import { BaseEntity } from "./projects/common";
 import { Role, Permission } from "@/constants/permissions";
 
 export interface User extends BaseEntity {

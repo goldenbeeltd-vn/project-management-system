@@ -1,0 +1,135 @@
+import { FileText, Users, Calendar, BarChart3, HandCoins } from "lucide-react";
+import {
+  TeamPermissions,
+  PermissionCategory,
+} from "@/types/projects/permissions";
+
+export const DEFAULT_PERMISSIONS: Record<string, TeamPermissions> = {
+  admin: {
+    canViewProject: true,
+    canEditProject: true,
+    canDeleteProject: true,
+    canManageTeam: true,
+    canViewTasks: true,
+    canCreateTasks: true,
+    canEditTasks: true,
+    canDeleteTasks: true,
+    canViewReports: true,
+    canExportData: true,
+    canManageFiles: true,
+    canViewBudget: true,
+    canEditBudget: true,
+  },
+  manager: {
+    canViewProject: true,
+    canEditProject: true,
+    canDeleteProject: false,
+    canManageTeam: true,
+    canViewTasks: true,
+    canCreateTasks: true,
+    canEditTasks: true,
+    canDeleteTasks: true,
+    canViewReports: true,
+    canExportData: true,
+    canManageFiles: true,
+    canViewBudget: true,
+    canEditBudget: true,
+  },
+  developer: {
+    canViewProject: true,
+    canEditProject: false,
+    canDeleteProject: false,
+    canManageTeam: false,
+    canViewTasks: true,
+    canCreateTasks: true,
+    canEditTasks: true,
+    canDeleteTasks: false,
+    canViewReports: false,
+    canExportData: false,
+    canManageFiles: true,
+    canViewBudget: false,
+    canEditBudget: false,
+  },
+  qc: {
+    canViewProject: true,
+    canEditProject: false,
+    canDeleteProject: false,
+    canManageTeam: false,
+    canViewTasks: true,
+    canCreateTasks: true,
+    canEditTasks: true,
+    canDeleteTasks: false,
+    canViewReports: true,
+    canExportData: false,
+    canManageFiles: false,
+    canViewBudget: false,
+    canEditBudget: false,
+  },
+  devops: {
+    canViewProject: true,
+    canEditProject: false,
+    canDeleteProject: false,
+    canManageTeam: false,
+    canViewTasks: true,
+    canCreateTasks: true,
+    canEditTasks: true,
+    canDeleteTasks: false,
+    canViewReports: true,
+    canExportData: true,
+    canManageFiles: true,
+    canViewBudget: false,
+    canEditBudget: false,
+  },
+};
+
+export const PERMISSION_CATEGORIES: PermissionCategory[] = [
+  {
+    title: "Quản lý dự án",
+    icon: FileText,
+    permissions: [
+      { key: "canViewProject", label: "Xem dự án" },
+      { key: "canEditProject", label: "Chỉnh sửa dự án" },
+      { key: "canDeleteProject", label: "Xóa dự án" },
+    ],
+  },
+  {
+    title: "Quản lý nhóm",
+    icon: Users,
+    permissions: [{ key: "canManageTeam", label: "Quản lý thành viên" }],
+  },
+  {
+    title: "Quản lý công việc",
+    icon: Calendar,
+    permissions: [
+      { key: "canViewTasks", label: "Xem công việc" },
+      { key: "canCreateTasks", label: "Tạo công việc" },
+      { key: "canEditTasks", label: "Chỉnh sửa công việc" },
+      { key: "canDeleteTasks", label: "Xóa công việc" },
+    ],
+  },
+  {
+    title: "Báo cáo & Dữ liệu",
+    icon: BarChart3,
+    permissions: [
+      { key: "canViewReports", label: "Xem báo cáo" },
+      { key: "canExportData", label: "Xuất dữ liệu" },
+      { key: "canManageFiles", label: "Quản lý tệp tin" },
+    ],
+  },
+  {
+    title: "Ngân sách",
+    icon: HandCoins,
+    permissions: [
+      { key: "canViewBudget", label: "Xem ngân sách" },
+      { key: "canEditBudget", label: "Chỉnh sửa ngân sách" },
+    ],
+  },
+];
+
+export const ROLE_DESCRIPTIONS = {
+  admin: { label: "Admin", description: "Toàn quyền" },
+  manager: { label: "Manager", description: "Quản lý dự án" },
+  developer: { label: "Developer", description: "Phát triển" },
+  qc: { label: "QC", description: "Kiểm thử" },
+  devops: { label: "DevOps", description: "Vận hành" },
+} as const;
