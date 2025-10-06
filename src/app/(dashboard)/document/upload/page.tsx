@@ -1,13 +1,12 @@
 "use client";
 
-import { Layout } from "@/components/layout/layout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, Upload, X, Check, FileText } from "lucide-react";
+import { Check, ChevronLeft, FileText, Upload, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { useRouter, useSearchParams } from "next/navigation";
 
 export default function UploadPage() {
   const searchParams = useSearchParams();
@@ -77,7 +76,7 @@ export default function UploadPage() {
   };
 
   return (
-    <Layout>
+    <>
       <div className="flex items-center space-x-4">
         <Link href={folderId ? `/document/${folderId}` : "/document"}>
           <Button
@@ -231,6 +230,6 @@ export default function UploadPage() {
           </div>
         </div>
       )}
-    </Layout>
+    </>
   );
 }

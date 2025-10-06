@@ -23,7 +23,7 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Main Content with left margin for sidebar */}
       <div
-        className={`pt-16 transition-all duration-300 h-screen ${
+        className={`pt-16 transition-all duration-300 min-h-screen ${
           isCollapsed ? "ml-12" : "ml-64"
         }`}
       >

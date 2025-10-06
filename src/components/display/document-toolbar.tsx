@@ -24,7 +24,7 @@ const DocumentToolbar = ({
         <Input
           type="search"
           placeholder="Tìm kiếm..."
-          className="pl-8 sm:w-[300px]"
+          className="pl-8 sm:w-[300px] bg-white"
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
         />

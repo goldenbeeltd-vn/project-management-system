@@ -3,7 +3,6 @@
 import CreateRoleModal from "@/components/features/role-permission/create-role-modal";
 import PermissionMatrix from "@/components/features/role-permission/permission-matrix";
 import RoleSelector from "@/components/features/role-permission/role-selector";
-import { Layout } from "@/components/layout/layout";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -98,7 +97,7 @@ export default function RolePage() {
     }
   };
   return (
-    <Layout>
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-3">
           <div className="space-y-4 lg:sticky lg:top-[80px]">
@@ -144,6 +143,6 @@ export default function RolePage() {
         onCreate={handleCreateRole}
         existingRoles={roles}
       />
-    </Layout>
+    </>
   );
 }

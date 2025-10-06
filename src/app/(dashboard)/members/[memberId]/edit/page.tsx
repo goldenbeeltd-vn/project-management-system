@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MemberFormType, memberSchema } from "@/lib/validation/memberSchema";
-import { formatVND } from "@/utils/formatCurrency";
+import { formatVND } from "@/utils/formatters";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Briefcase,
@@ -35,7 +35,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 const departments = [
   { value: "Kỹ thuật", label: "Kỹ thuật" },
@@ -74,7 +73,35 @@ const banks = [
   "Sacombank",
 ];
 
-const NewMemberPage = () => {
+// Dummy member data for edit
+const memberData: MemberFormType = {
+  name: "Nguyễn Văn A",
+  dob: "1995-06-15",
+  gender: "Nam",
+  email: "anv@goldenbee.com",
+  phone: "0901234567",
+  address: "123 Đường ABC, Quận 1, TP.HCM",
+  bankName: "Vietcombank",
+  bankBranch: "Quận 1",
+  bankAccount: "0123456789",
+  bankHolder: "Nguyễn Văn A",
+  startDate: "2022-01-10",
+  department: "Kỹ thuật",
+  position: "Frontend Developer",
+  status: "Đang làm",
+  role: "User",
+  username: "anv@goldenbee.com",
+  password: "",
+  salary: 15000000,
+  allowance: 2000000,
+  documents: [
+    new File([""], "cccd.pdf", { type: "application/pdf" }),
+    new File([""], "bhyt.jpg", { type: "image/jpeg" }),
+    new File([""], "contract.png", { type: "image/png" }),
+  ],
+};
+
+const EditMemberPage = () => {
   const {
     control,
     handleSubmit,
@@ -84,26 +111,7 @@ const NewMemberPage = () => {
     formState: { errors },
   } = useForm<MemberFormType>({
     resolver: zodResolver(memberSchema),
-    defaultValues: {
-      name: "",
-      dob: "",
-      gender: "Nam",
-      email: "",
-      phone: "",
-      address: "",
-      bankName: "",
-      bankBranch: "",
-      bankAccount: "",
-      bankHolder: "",
-      startDate: "",
-      department: "",
-      position: "",
-      status: "Đang làm",
-      role: "User",
-      username: "",
-      password: "",
-      documents: [],
-    },
+    defaultValues: memberData,
   });
 
   const emailValue = watch("email");
@@ -116,19 +124,19 @@ const NewMemberPage = () => {
   const router = useRouter();
 
   const onSubmit = async (data: MemberFormType) => {
+    // TODO: Call API to update member
     console.log(data);
-    toast.success("Thêm thành viên thành công!");
+    alert("Cập nhật thành viên thành công!");
   };
 
   return (
     <div className="">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Thêm thành viên mới
+          Cập nhật thông tin nhân viên
         </h1>
         <p className="text-gray-600">
-          Điền đầy đủ thông tin để tạo tài khoản nhân viên mới
+          Chỉnh sửa thông tin nhân viên và lưu lại thay đổi
         </p>
       </div>
 
@@ -377,7 +385,6 @@ const NewMemberPage = () => {
                   )}
                 />
               </FormFieldCustom>
-
               <FormFieldCustom
                 label="Phụ cấp"
                 error={errors.allowance?.message}
@@ -536,13 +543,13 @@ const NewMemberPage = () => {
                     <Input
                       {...field}
                       type="password"
-                      placeholder="Để trống để tự động tạo"
+                      placeholder="Để trống để giữ nguyên mật khẩu"
                       className="h-10"
                     />
                   )}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Nếu để trống, hệ thống sẽ tự động tạo mật khẩu
+                  Nếu để trống, mật khẩu sẽ không thay đổi
                 </p>
               </FormFieldCustom>
             </div>
@@ -570,7 +577,7 @@ const NewMemberPage = () => {
         </FormSection>
 
         {/* Action Buttons */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-200 shadow-lg rounded-t-2xl px-6 py-3 flex items-center justify-between">
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 shadow-lg rounded-t-2xl p-6 flex items-center justify-between">
           <p className="text-sm text-gray-600">
             <span className="text-red-500">*</span> Trường bắt buộc
           </p>
@@ -588,7 +595,7 @@ const NewMemberPage = () => {
             </Button>
             <Button type="submit" className="px-8 h-10 shadow-md">
               <CheckCircle2 className="w-4 h-4 mr-2" />
-              Thêm thành viên
+              Lưu thay đổi
             </Button>
           </div>
         </div>
@@ -597,4 +604,4 @@ const NewMemberPage = () => {
   );
 };
 
-export default NewMemberPage;
+export default EditMemberPage;

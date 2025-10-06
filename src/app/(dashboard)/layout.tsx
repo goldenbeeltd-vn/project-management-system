@@ -1,12 +1,12 @@
 import { Layout } from "@/components/layout/layout";
-import { Providers } from "../providers";
+import { ReduxProvider } from "@/providers/ReduxProvider";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <Providers>
+      <ReduxProvider>
         <Layout>{children}</Layout>
-      </Providers>
+      </ReduxProvider>
     </>
   );
 };

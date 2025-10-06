@@ -24,7 +24,6 @@ import {
   Settings,
   Shield,
   Star,
-  User,
   UserCheck,
   Users,
   Wrench,
@@ -57,7 +56,7 @@ export function Sidebar({
       <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide">
         <nav className="space-y-1 p-5.5">
           {/* Dashboard */}
-          <Link href="/dashboard" className={navigationLinkClasses}>
+          <Link href="/" className={navigationLinkClasses}>
             <LayoutGrid className="w-4 h-4 flex-shrink-0" />
             {!isCollapsed && <span>Dashboard</span>}
           </Link>
