@@ -14,12 +14,16 @@ import {
   Folder,
   FolderOpen,
   Globe,
+  HandCoins,
   Key,
   LayoutGrid,
   ListTodo,
   MessageSquare,
   MoreHorizontal,
+  Percent,
+  PiggyBank,
   Plus,
+  RefreshCcwDot,
   Server,
   Settings,
   Shield,
@@ -258,10 +262,64 @@ export function Sidebar({
           </Link>
 
           {/* Finance & Budget */}
-          <Link href="/finance" className={navigationLinkClasses}>
-            <DollarSign className="w-4 h-4 flex-shrink-0" />
-            {!isCollapsed && <span>Ngân sách & Chi phí</span>}
-          </Link>
+          <div className="space-y-1">
+            <button
+              onClick={() => toggleSection("finance")}
+              className={
+                isCollapsed
+                  ? `${baseItemClasses} justify-center`
+                  : actionButtonClasses
+              }
+            >
+              <div className="flex items-center gap-3">
+                <PiggyBank className="w-4 h-4 flex-shrink-0" />
+                {!isCollapsed && <span>Ngân sách & Chi phí</span>}
+              </div>
+              {!isCollapsed &&
+                (isExpanded("finance") ? (
+                  <ChevronDown className="w-4 h-4" />
+                ) : (
+                  <ChevronRight className="w-4 h-4" />
+                ))}
+            </button>
+
+            {/* Submenu - chỉ hiện khi không collapsed và section được mở */}
+            {!isCollapsed && isExpanded("finance") && (
+              <div className="ml-4 mt-1 space-y-1">
+                {/* Trang chính: Chi phí */}
+                <Link href="/finance" className={navigationLinkClasses}>
+                  <DollarSign className="w-4 h-4 flex-shrink-0" />
+                  <span>Chi phí</span>
+                </Link>
+
+                <Link href="/finance/income" className={navigationLinkClasses}>
+                  <RefreshCcwDot className="w-4 h-4 flex-shrink-0" />
+                  <span>Thu chi</span>
+                </Link>
+
+                {/* Công nợ */}
+                <Link
+                  href="/finance/payables"
+                  className={navigationLinkClasses}
+                >
+                  <HandCoins className="w-4 h-4 flex-shrink-0" />
+                  <span>Công nợ</span>
+                </Link>
+
+                {/* Báo cáo tài chính */}
+                <Link href="/finance/reports" className={navigationLinkClasses}>
+                  <BarChart3 className="w-4 h-4 flex-shrink-0" />
+                  <span>Báo cáo tài chính</span>
+                </Link>
+
+                {/* Thuế */}
+                <Link href="/finance/tax" className={navigationLinkClasses}>
+                  <Percent className="w-4 h-4 flex-shrink-0" />
+                  <span>Thuế</span>
+                </Link>
+              </div>
+            )}
+          </div>
 
           {/* Risk Management */}
           <Link href="/risks" className={navigationLinkClasses}>
