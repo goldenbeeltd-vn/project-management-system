@@ -3,7 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { DocumentService } from "@/services/document.service";
-import { Check, ChevronLeft, FileText, Upload, X } from "lucide-react";
+import { useGoogleDrive } from "@/providers/GoogleDriveProvider";
+import {
+  Check,
+  ChevronLeft,
+  FileText,
+  Upload,
+  X,
+  AlertCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -13,6 +21,7 @@ export default function UploadPage() {
   const searchParams = useSearchParams();
   const folderId = searchParams.get("folderId");
   const router = useRouter();
+  const { isSignedIn } = useGoogleDrive();
   const [files, setFiles] = useState<File[]>([]);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [isUploading, setIsUploading] = useState(false);
@@ -33,6 +42,40 @@ export default function UploadPage() {
     onDrop,
     multiple: true,
   });
+
+  // Redirect if not signed in (after all hooks)
+  if (!isSignedIn) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center space-x-4">
+          <Link href="/document">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex items-center space-x-2"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Quay lại</span>
+            </Button>
+          </Link>
+          <h1 className="text-2xl font-bold">Tải tệp lên</h1>
+        </div>
+
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-500" />
+          <h3 className="text-lg font-semibold text-red-800 mb-2">
+            Cần đăng nhập Google Drive
+          </h3>
+          <p className="text-red-600 mb-4">
+            Vui lòng đăng nhập Google Drive để sử dụng tính năng tải tệp lên.
+          </p>
+          <Link href="/document">
+            <Button>Quay về trang tài liệu</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const removeFile = (fileToRemove: File) => {
     setFiles(files.filter((file) => file !== fileToRemove));
@@ -60,7 +103,7 @@ export default function UploadPage() {
           // Upload file using API
           const result = await DocumentService.uploadFile(
             file,
-            folderId || undefined
+            folderId || undefined,
           );
 
           // Update progress to 100%

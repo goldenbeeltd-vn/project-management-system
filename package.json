@@ -1,31 +1,44 @@
-﻿{
-  "name": "project-management-system",
+{
+  "name": "quan-ly-du-an",
   "version": "1.0.0",
+  "description": "Dự án quản lý - monorepo với Next.js frontend và NestJS backend",
   "private": true,
-  "description": "Project Management System - Monorepo",
   "workspaces": [
     "frontend",
     "backend"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev": "concurrently \"npm run start:dev --workspace=backend\" \"npm run dev --workspace=frontend\"",
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run start:dev --workspace=backend",
-    "build": "npm run build --workspace=frontend && npm run build --workspace=backend",
-    "lint": "npm run lint --workspace=frontend && npm run lint --workspace=backend",
-    "test": "npm run test --workspace=backend",
-    "clean": "rimraf node_modules",
-    "reinstall": "npm run clean && npm install",
-    "prepare": "husky"
+    "build": "concurrently \"npm run      build --workspace=backend\" \"npm run build --workspace=frontend\"",
+    "start": "concurrently \"npm start --workspace=backend\" \"npm start --workspace=frontend\"",
+    "test": "concurrently \"npm test --workspace=backend\" \"npm test --workspace=frontend\"",
+    "lint": "concurrently \"npm run lint --workspace=backend\" \"npm run lint --workspace=frontend\"",
+    "lint:fix": "concurrently \"npm run lint:fix --workspace=backend\" \"npm run lint:fix --workspace=frontend\"",
+    "format": "concurrently \"npm run format --workspace=backend\" \"npm run format --workspace=frontend\"",
+    "clean": "rimraf frontend/dist backend/dist frontend/.next backend/.next node_modules frontend/node_modules backend/node_modules",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "lint-staged": "^15.2.10",
-    "rimraf": "^6.0.1"
+    "rimraf": "^6.0.1",
+    "husky": "^9.1.7"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "lint-staged": {
-    "frontend/**/*.{js,jsx,ts,tsx}": "npm run lint --workspace=frontend -- --fix",
-    "backend/**/*.{js,jsx,ts,tsx}": "npm run lint --workspace=backend -- --fix",
-    "*.{json,md}": "prettier --write"
-  }
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "author": "",
+  "license": "ISC"
 }

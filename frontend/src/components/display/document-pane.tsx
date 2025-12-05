@@ -3,23 +3,67 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { File, Folder, X } from "lucide-react";
 import { IDocument } from "@/types/document";
 import { formatDate } from "@/lib/formatter";
+import { useEffect, useState } from "react";
 
 interface DetailsPanelProps {
   item: IDocument;
   onClose: () => void;
+  isVisible: boolean;
 }
 
-export function DocumentDetailsPanel({ item, onClose }: DetailsPanelProps) {
+export function DocumentDetailsPanel({
+  item,
+  onClose,
+  isVisible,
+}: DetailsPanelProps) {
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => setIsAnimating(true), 10);
+    }
+  }, [isVisible]);
+
+  const handleClose = () => {
+    setIsAnimating(false);
+    // Delay the actual close to allow animation to complete
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  };
+
   return (
-    <div className="p-4 w-[30%] bg-white rounded-md">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold">Chi tiết</h2>
-        <Button variant="ghost" size="sm" onClick={onClose}>
+    <div
+      className={`p-4 w-[30%] bg-white rounded-lg shadow-xl border border-gray-200 
+        transition-all duration-300 ease-out transform-gpu
+        ${
+          isAnimating
+            ? "translate-x-0 opacity-100 scale-100"
+            : "translate-x-full opacity-0 scale-95"
+        }`}
+    >
+      <div
+        className={`flex items-center justify-between mb-6 
+        transition-opacity duration-500 delay-100 ease-out
+        ${isAnimating ? "opacity-100" : "opacity-0"}`}
+      >
+        <h2 className="text-lg font-semibold text-gray-900">Chi tiết</h2>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleClose}
+          className="hover:bg-gray-100 active:bg-gray-200 transition-colors duration-200 rounded-md"
+        >
           <X className="h-4 w-4" />
         </Button>
       </div>
 
-      <div className="space-y-6">
+      <div
+        className={`space-y-6 
+        transition-opacity duration-500 delay-200 ease-out
+        ${isAnimating ? "opacity-100" : "opacity-0"}`}
+      >
         <div className="flex items-center space-x-3">
           {item.type === "folder" ? (
             <Folder className="w-8 h-8 text-blue-500" />

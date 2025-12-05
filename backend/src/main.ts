@@ -7,7 +7,11 @@ async function bootstrap() {
 
   // Enable CORS for frontend
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
@@ -18,9 +22,9 @@ async function bootstrap() {
   // Set global prefix
   app.setGlobalPrefix('api');
 
-  await app.listen(process.env.PORT ?? 3001);
+  await app.listen(process.env.PORT ?? 3002);
   console.log(
-    `Application is running on: http://localhost:${process.env.PORT ?? 3001}`,
+    `Application is running on: http://localhost:${process.env.PORT ?? 3002}`,
   );
 }
 void bootstrap();

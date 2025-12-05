@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { IDocument } from "@/types/document";
 import { DocumentService } from "@/services/document.service";
 import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
+
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -22,13 +22,43 @@ export default function FolderDetailPage() {
   const [showAddFolderModal, setShowAddFolderModal] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [documentToRename, setDocumentToRename] = useState<IDocument | null>(
-    null
+    null,
   );
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
 
   const [items, setItems] = useState<IDocument[]>([]);
   const [loading, setLoading] = useState(true);
+  const [folderData, setFolderData] = useState<{
+    id: string;
+    name: string;
+    parentId?: string;
+  } | null>(null);
+  // Load folder info
+  useEffect(() => {
+    const loadFolderInfo = async () => {
+      try {
+        const folder = await DocumentService.getDocument(id);
+        setFolderData({
+          id: folder.id,
+          name: folder.name,
+          parentId: folder.parentId,
+        });
+      } catch (error) {
+        console.error("Failed to load folder info:", error);
+        // Fallback to default name
+        setFolderData({
+          id: id,
+          name: "Folder",
+          parentId: undefined,
+        });
+      }
+    };
+
+    if (id) {
+      loadFolderInfo();
+    }
+  }, [id]);
 
   // Load documents from API
   useEffect(() => {
@@ -37,7 +67,7 @@ export default function FolderDetailPage() {
         setLoading(true);
         const documents = await DocumentService.getDocuments(
           id,
-          searchTerm || undefined
+          searchTerm || undefined,
         );
         setItems(documents);
       } catch (error) {
@@ -94,36 +124,53 @@ export default function FolderDetailPage() {
       });
       setItems(
         items.map((item) =>
-          item.id === documentToRename.id ? { ...item, name: newName } : item
-        )
+          item.id === documentToRename.id ? { ...item, name: newName } : item,
+        ),
       );
     } catch (error) {
       console.error("Failed to rename document:", error);
     }
   };
 
-  const folderData = {
-    id,
-    name: "Documents",
+  const handleGoBack = () => {
+    if (folderData?.parentId) {
+      // Nếu có folder cha, quay về folder cha
+      router.push(`/document/${folderData.parentId}`);
+    } else {
+      // Nếu không có folder cha, quay về trang chính
+      router.push("/document");
+    }
+  };
+
+  const getBackButtonText = () => {
+    if (folderData?.parentId) {
+      return "Trở về thư mục cha";
+    } else {
+      return "Trở về danh sách chính";
+    }
   };
 
   return (
     <>
-      <div className="flex gap-3">
-        <div className={`${showDetails ? "w-[70%]" : "w-full"}`}>
+      <div className="flex gap-3 relative overflow-hidden">
+        <div
+          className={`transition-all duration-300 ease-in-out ${showDetails ? "w-[70%]" : "w-full"}`}
+        >
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
-              <Link href="/document">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex items-center space-x-2"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span>Trở lại</span>
-                </Button>
-              </Link>
-              <h1 className="text-2xl font-bold">{folderData.name}</h1>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleGoBack}
+                className="flex items-center space-x-2 hover:bg-gray-100 transition-colors"
+                title={getBackButtonText()}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Trở lại</span>
+              </Button>
+              <h1 className="text-2xl font-bold">
+                {folderData?.name || "Đang tải..."}
+              </h1>
             </div>
 
             <DocumentToolbar
@@ -162,6 +209,7 @@ export default function FolderDetailPage() {
         {showDetails && selectedItem && (
           <DocumentDetailsPanel
             item={selectedItem}
+            isVisible={showDetails}
             onClose={() => setShowDetails(false)}
           />
         )}

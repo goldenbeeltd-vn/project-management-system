@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { GoogleDriveProvider } from "@/providers/GoogleDriveProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={inter.className}>
-        <div className="min-h-screen">{children}</div>
+        <GoogleDriveProvider>
+          <div className="min-h-screen">{children}</div>
+        </GoogleDriveProvider>
       </body>
     </html>
   );

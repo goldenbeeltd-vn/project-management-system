@@ -8,11 +8,13 @@ import { RenameDocumentModal } from "@/components/modals/rename-document-modal";
 import { DocumentTableView } from "@/components/tables/document-table";
 import { IDocument } from "@/types/document";
 import { DocumentService } from "@/services/document.service";
+import { useGoogleDrive } from "@/providers/GoogleDriveProvider";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function DocumentPage() {
   const router = useRouter();
+  const { isSignedIn } = useGoogleDrive();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItem, setSelectedItem] = useState<IDocument | null>(null);
   const [showDetails, setShowDetails] = useState(false);
@@ -20,30 +22,38 @@ export default function DocumentPage() {
   const [showAddFolderModal, setShowAddFolderModal] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [documentToRename, setDocumentToRename] = useState<IDocument | null>(
-    null
+    null,
   );
   const [items, setItems] = useState<IDocument[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load documents from API
+  // Load documents from Google Drive
   useEffect(() => {
     const loadDocuments = async () => {
+      // Only load documents if signed in to Google Drive
+      if (!isSignedIn) {
+        setItems([]);
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
         const documents = await DocumentService.getDocuments(
           undefined,
-          searchTerm || undefined
+          searchTerm || undefined,
         );
         setItems(documents);
       } catch (error) {
         console.error("Failed to load documents:", error);
+        setItems([]);
       } finally {
         setLoading(false);
       }
     };
 
     loadDocuments();
-  }, [searchTerm]);
+  }, [searchTerm, isSignedIn]);
 
   const handleShowDetails = (item: IDocument) => {
     setSelectedItem(item);
@@ -51,6 +61,11 @@ export default function DocumentPage() {
   };
 
   const handleAddFolder = async (folderName: string) => {
+    if (!isSignedIn) {
+      alert("Vui lòng đăng nhập Google Drive trước!");
+      return;
+    }
+
     try {
       const newFolder = await DocumentService.createFolder(folderName);
       const folderDoc: IDocument = {
@@ -66,6 +81,7 @@ export default function DocumentPage() {
       setItems([folderDoc, ...items]);
     } catch (error) {
       console.error("Failed to create folder:", error);
+      alert("Không thể tạo thư mục. Vui lòng thử lại!");
     }
   };
 
@@ -87,8 +103,8 @@ export default function DocumentPage() {
       });
       setItems(
         items.map((item) =>
-          item.id === documentToRename.id ? { ...item, name: newName } : item
-        )
+          item.id === documentToRename.id ? { ...item, name: newName } : item,
+        ),
       );
     } catch (error) {
       console.error("Failed to rename document:", error);
@@ -97,16 +113,30 @@ export default function DocumentPage() {
 
   return (
     <>
-      <div className="flex gap-3">
-        <div className={`${showDetails ? "w-[70%]" : "w-full"}`}>
+      <div className="flex gap-3 relative overflow-hidden">
+        <div
+          className={`transition-all duration-300 ease-in-out ${showDetails ? "w-[70%]" : "w-full"}`}
+        >
           <div className="space-y-4">
             <DocumentToolbar
               searchTerm={searchTerm}
               onSearchChange={setSearchTerm}
               viewMode={viewMode}
               onViewModeChange={setViewMode}
-              onAddFolder={() => setShowAddFolderModal(true)}
-              onUploadFile={() => router.push("/document/upload")}
+              onAddFolder={() => {
+                if (!isSignedIn) {
+                  alert("Vui lòng đăng nhập Google Drive trước!");
+                  return;
+                }
+                setShowAddFolderModal(true);
+              }}
+              onUploadFile={() => {
+                if (!isSignedIn) {
+                  alert("Vui lòng đăng nhập Google Drive trước!");
+                  return;
+                }
+                router.push("/document/upload");
+              }}
             />
 
             {loading ? (
@@ -134,6 +164,7 @@ export default function DocumentPage() {
         {showDetails && selectedItem && (
           <DocumentDetailsPanel
             item={selectedItem}
+            isVisible={showDetails}
             onClose={() => setShowDetails(false)}
           />
         )}

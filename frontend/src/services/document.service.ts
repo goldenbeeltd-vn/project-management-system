@@ -1,6 +1,5 @@
 import { IDocument } from "@/types/document";
-
-const API_BASE_URL = "http://localhost:3001/api";
+import { GoogleDriveGISService } from "./google-drive-gis.service";
 
 export interface DocumentResponse {
   id: string;
@@ -19,122 +18,116 @@ export interface DocumentResponse {
 }
 
 export class DocumentService {
-  private static async fetchApi(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<unknown> {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-      ...options,
-    });
-
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
-    }
-
-    const text = await response.text();
-    if (text) {
-      try {
-        return JSON.parse(text);
-      } catch {
-        return text;
-      }
-    }
-
-    return null;
-  }
-
-  // Lấy danh sách documents
+  // Lấy danh sách documents từ Google Drive
   static async getDocuments(
     parentId?: string,
-    search?: string
+    search?: string,
   ): Promise<IDocument[]> {
-    const params = new URLSearchParams();
-    if (parentId) params.append("parentId", parentId);
-    if (search) params.append("search", search);
-
-    const queryString = params.toString();
-    const endpoint = `/documents${queryString ? `?${queryString}` : ""}`;
-
-    const documents = (await this.fetchApi(endpoint)) as DocumentResponse[];
-
-    return documents.map((doc) => ({
-      type: doc.type,
-      name: doc.name,
-      updatedAt: new Date(doc.updatedAt).toISOString().split("T")[0],
-      size: doc.size,
-      user: {
-        name: doc.createdBy.name,
-        avatar: doc.createdBy.avatar,
-      },
-      id: doc.id,
-      parentId: doc.parentId,
-    }));
+    return await GoogleDriveGISService.getFiles(parentId, search);
   }
 
-  // Lấy thông tin chi tiết một document
+  // Lấy thông tin chi tiết một document từ Google Drive
   static async getDocument(id: string): Promise<DocumentResponse> {
-    return this.fetchApi(`/documents/${id}`) as Promise<DocumentResponse>;
+    const file = await GoogleDriveGISService.getFile(id);
+    // Convert Google Drive format to local format
+    return {
+      id: file.id,
+      name: file.name,
+      type:
+        file.mimeType === "application/vnd.google-apps.folder"
+          ? "folder"
+          : "file",
+      size: file.size,
+      mimeType: file.mimeType,
+      parentId: file.parents?.[0],
+      createdBy: {
+        id: "google-user",
+        name: file.owners?.[0]?.displayName || "Unknown",
+        avatar: file.owners?.[0]?.photoLink,
+      },
+      createdAt: file.createdTime,
+      updatedAt: file.modifiedTime,
+    };
   }
 
-  // Tạo folder mới
+  // Tạo folder mới trên Google Drive
   static async createFolder(
     name: string,
-    parentId?: string
+    parentId?: string,
   ): Promise<DocumentResponse> {
-    return this.fetchApi("/documents/folders", {
-      method: "POST",
-      body: JSON.stringify({
-        name,
-        type: "folder",
-        parentId,
-      }),
-    }) as Promise<DocumentResponse>;
+    const folder = await GoogleDriveGISService.createFolder(name, parentId);
+    return {
+      id: folder.id,
+      name: folder.name,
+      type: "folder",
+      mimeType: folder.mimeType,
+      parentId: folder.parents?.[0],
+      createdBy: {
+        id: "google-user",
+        name: folder.owners?.[0]?.displayName || "Unknown",
+        avatar: folder.owners?.[0]?.photoLink,
+      },
+      createdAt: folder.createdTime,
+      updatedAt: folder.modifiedTime,
+    };
   }
 
-  // Tải file
+  // Tải file lên Google Drive
   static async uploadFile(
     file: File,
-    parentId?: string
+    parentId?: string,
   ): Promise<DocumentResponse> {
-    const formData = new FormData();
-    formData.append("file", file);
-    if (parentId) {
-      formData.append("parentId", parentId);
-    }
-
-    const response = await fetch(`${API_BASE_URL}/documents/upload`, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Upload failed: ${response.status} ${response.statusText}`
-      );
-    }
-
-    return response.json();
+    const uploadedFile = await GoogleDriveGISService.uploadFile(file, parentId);
+    return {
+      id: uploadedFile.id,
+      name: uploadedFile.name,
+      type: "file",
+      size: uploadedFile.size,
+      mimeType: uploadedFile.mimeType,
+      parentId: uploadedFile.parents?.[0],
+      createdBy: {
+        id: "google-user",
+        name: uploadedFile.owners?.[0]?.displayName || "Unknown",
+        avatar: uploadedFile.owners?.[0]?.photoLink,
+      },
+      createdAt: uploadedFile.createdTime,
+      updatedAt: uploadedFile.modifiedTime,
+    };
   }
 
-  // Cập nhật document
+  // Cập nhật document trên Google Drive
   static async updateDocument(
     id: string,
-    data: { name?: string; parentId?: string }
+    data: { name?: string; parents?: string[] },
   ): Promise<DocumentResponse> {
-    return this.fetchApi(`/documents/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    }) as Promise<DocumentResponse>;
+    const updatedFile = await GoogleDriveGISService.updateFile(id, data);
+    return {
+      id: updatedFile.id,
+      name: updatedFile.name,
+      type:
+        updatedFile.mimeType === "application/vnd.google-apps.folder"
+          ? "folder"
+          : "file",
+      size: updatedFile.size,
+      mimeType: updatedFile.mimeType,
+      parentId: updatedFile.parents?.[0],
+      createdBy: {
+        id: "google-user",
+        name: updatedFile.owners?.[0]?.displayName || "Unknown",
+        avatar: updatedFile.owners?.[0]?.photoLink,
+      },
+      createdAt: updatedFile.createdTime,
+      updatedAt: updatedFile.modifiedTime,
+    };
   }
 
-  // Xóa document
+  // Xóa document từ Google Drive
   static async deleteDocument(id: string): Promise<void> {
-    await this.fetchApi(`/documents/${id}`, {
-      method: "DELETE",
-    });
+    await GoogleDriveGISService.deleteFile(id);
+  }
+
+  // Download file từ Google Drive
+  static async downloadFile(id: string): Promise<Blob> {
+    return await GoogleDriveGISService.downloadFile(id);
   }
 }
